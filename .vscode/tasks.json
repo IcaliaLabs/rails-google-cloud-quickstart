@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Watch TailwindCSS",
+      "type": "shell",
+      "isBackground": true,
+      "command": "rails tailwindcss:watch",
+      "problemMatcher": [
+        // Match multi-line error:
+        {
+          "fileLocation": "absolute",
+          "pattern": [
+            {
+              "regexp": "^\\w+Error:\\s+(.+)",
+              "message": 1
+            },
+            {
+              "regexp": "^\\s+at\\s(.+):(\\d+):(\\d+)",
+              "file": 1,
+              "line": 2,
+              "column": 3
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^Rebuilding\\.{3}",
+            "endsPattern": "^(Done in (\\d+)ms\\.|\\})$"
+          }
+        },
+        // Match CssSyntaxError errors:
+        {
+          "fileLocation": "absolute",
+          "pattern": {
+            "regexp": "^\\w+Error:\\s+(.+):(\\d+):(\\d+):\\s(.+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "message": 4
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^Rebuilding\\.{3}",
+            "endsPattern": "^(Done in (\\d+)ms\\.|\\s+\\d+\\s\\|)$"
+          }
+        }
+      ]
+    }
+  ]
+}
