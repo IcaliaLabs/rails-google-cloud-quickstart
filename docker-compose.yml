@@ -16,12 +16,12 @@ services:
       POSTGRES_USER: ${USER:-you}
       POSTGRES_HOST_AUTH_METHOD: trust
 
-    # See https://docs.docker.com/compose/profiles/
-    profiles:
-      - ci
-      - testing
-      - staging
-      - development
+    # # See https://docs.docker.com/compose/profiles/
+    # profiles:
+    #   - ci
+    #   - testing
+    #   - staging
+    #   - development
 
   chrome:
     image: icalialabs/chromium:latest
@@ -41,10 +41,10 @@ services:
       # https://docs.browserless.io/docs/docker.html#connection-timeout
       CONNECTION_TIMEOUT: 600000
 
-    profiles:
-      - ci
-      - testing
-      - development
+    # profiles:
+    #   - ci
+    #   - testing
+    #   - development
 
   # The tests container:
   tests: &app
@@ -108,9 +108,9 @@ services:
 
       # GOOGLE_CLOUD_PROJECT: my-project
 
-    profiles:
-      - ci
-      - testing
+    # profiles:
+    #   - ci
+    #   - testing
 
   # The "plain" development container:
   development: &development
@@ -127,13 +127,15 @@ services:
     # The command we want to execute by default when running the container
     command: rails server -b 0.0.0.0
 
-    profiles:
-      - development
+    # profiles:
+    #   - development
 
   devcontainer:
     <<: *development
     ports: [] # Managed by Visual Studio Code
-    profiles: []
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
 
   web:
     image: us-central1-docker.pkg.dev/icalialabs-event-planner/my-app/my-app-app${IMAGE_TAG_OR_DIGEST:-:latest}
@@ -150,5 +152,5 @@ services:
       RAILS_ENV: production
       DATABASE_URL: postgres://${USER:-you}@postgres:5432/MY_APP_development?encoding=unicode
       SECRET_KEY_BASE: 60ff5b18bcc63e354e8e476f0cd0eb6b96a779246fbd865db930f702a15aa48c20c2967a9f99577cfedd0d4a1c1741168c402944772c15b8fee152774c144189
-    profiles:
-      - staging
+    # profiles:
+    #   - staging
