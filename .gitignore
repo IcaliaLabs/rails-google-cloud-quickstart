@@ -32,3 +32,15 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore test coverage reports:
+coverage/
+
+# Ignore OS artifacts:
+**/.DS_Store
+
+# Ignore RSpec state:
+spec/examples.txt
+
+# Ignore ENV variables:
+.env

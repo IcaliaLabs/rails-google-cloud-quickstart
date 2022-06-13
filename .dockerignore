@@ -1,0 +1,54 @@
+# Ignore version control files:
+.git/
+.gitignore
+
+# Ignore github templates:
+.github/
+
+# Ignore docker and environment files:
+*Dockerfile
+docker-compose*.yml
+**/*.env
+.dockerignore
+
+# Ignore log files:
+log/*.log
+
+# Ignore temporary files:
+tmp/
+!tmp/pids/.keep
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Ignore OS artifacts:
+**/.DS_Store
+
+# Ignore database dumps:
+db/dumps/*
+!db/dumps/.keep
+
+# Ignore bash / IRB / Byebug history files
+.*_hist*
+
+
+# Ignore downloadable configuration files (i.e. RuboCop):
+.rubocop-*
+.codeclimate.yml
+.csslintrc
+.eslintignore
+.eslintrc
+.reek.yml
+
+# Ignore test coverage reports:
+coverage/*
+
+# Ignore RSpec state:
+spec/examples.txt
+
+# Ignore dotenv files
+**/*.env
+!**/*example*.env
+
+# Ignore test coverage reports:
+coverage/

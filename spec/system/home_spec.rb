@@ -1,4 +1,3 @@
-
 require 'system_helper'
 
 RSpec.describe 'Home page', type: :system do
