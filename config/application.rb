@@ -18,5 +18,7 @@ module AssessmentTool
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    config.generators.test_framework = :rspec
   end
 end

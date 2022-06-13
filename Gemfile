@@ -54,6 +54,11 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+
+  # We'll use RSpec as the testing framework for Rails
+  gem 'rspec-rails', '~> 5.1', '>= 5.1.2'
+
+  gem 'factory_bot_rails', '~> 6.2'
 end
 
 group :development do
@@ -70,6 +75,18 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  
+  gem 'cuprite', '~> 0.13'
+  gem 'test-prof', '~> 1.0', '>= 1.0.9'
+  
+  # Webmock is a library for stubbing http request (with Faraday in the case)
+  gem 'webmock', '~> 3.14'
+
+  gem 'shoulda-matchers', '~> 5.1'
+
+  # Generates test vs. code coverage reports
+  gem 'simplecov', '~> 0.21.2', require: false
+
+  # We'll use sinatra to implement our mock servers:
+  gem 'sinatra', '~> 2.2', require: false
 end
