@@ -1,0 +1,154 @@
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    volumes:
+      # We'll store the postgres data in the 'postgres_data' volume we defined:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    ports:
+      - published: ${MY_APP_PG_PORT:-5432}
+        target: 5432
+    environment:
+      POSTGRES_USER: ${USER:-you}
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+    # See https://docs.docker.com/compose/profiles/
+    profiles:
+      - ci
+      - testing
+      - staging
+      - development
+
+  chrome:
+    image: icalialabs/chromium:latest
+    ports:
+      - published: ${MY_APP_CHROME_WEB_PORT:-9222}
+        target: 9222
+    # Mount application source code to support file uploading
+    # (otherwise Chrome won't be able to find files).
+    # NOTE: Make sure you use absolute paths in `#attach_file`.
+    volumes:
+      - type: bind
+        source: .
+        target: /workspaces/my-app
+    environment:
+      PORT: 9222
+      # Set connection timeout to avoid timeout exception during debugging
+      # https://docs.browserless.io/docs/docker.html#connection-timeout
+      CONNECTION_TIMEOUT: 600000
+
+    profiles:
+      - ci
+      - testing
+      - development
+
+  # The tests container:
+  tests: &app
+    build: &app_build
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+      args:
+        DEVELOPER_UID: ${UID:-1000}
+        DEVELOPER_USERNAME: ${USER:-you}
+    image: icalialabs/my-app${TESTING_IMAGE_TAG:-:testing}
+
+    volumes:
+      # Mount the app code into the app containers:
+      - .:/workspaces/my-app
+
+    # Keep the stdin open, so we can attach to our app container's process
+    # and do things such as byebug, etc:
+    stdin_open: true
+
+    # Enable sending signals (CTRL+C, CTRL+P + CTRL+Q) into the container:
+    tty: true
+
+    # Required for ptrace-based debuggers like C++, Go, and Rust
+    cap_add:
+      - SYS_PTRACE
+      - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
+
+    # TODO: Re-enable:
+    # entrypoint: /workspaces/my-app/bin/dev-entrypoint
+
+    # Link to our postgres and redis services, so they can be visible from our
+    # app service containers:
+    depends_on:
+      - chrome
+      - postgres
+
+    # The command we want to execute by default when running the container
+    command: rspec
+
+    # Specify environment variables available for our app containers. We'll
+    # leave a YML anchor in case we need to override or add more variables if
+    # needed on each app service:
+    environment: &app_env
+      RAILS_LOG_TO_STDOUT: "true"
+
+      DEBIAN_FRONTEND: dialog
+
+      # Tells the test suite to use the "chrome" service instead of a local
+      # chrome install:
+      CHROME_URL: http://chrome:9222
+      CHROME_PUBLIC_URL: ${MY_APP_CHROME_PUBLIC_URL:-http://localhost:9222}
+
+      DATABASE_URL: postgres://postgres:5432/?encoding=unicode
+
+      # Simplecov checks for the presence of this variable to generate a report
+      # with the format required by codeclimate... which is a bit lame...
+      # CC_TEST_REPORTER_ID: SOME_ID
+
+      # GOOGLE_CLOUD_PROJECT: my-project
+
+    profiles:
+      - ci
+      - testing
+
+  # The "plain" development container:
+  development: &development
+    <<: *app
+    build:
+      <<: *app_build
+      target: development
+
+    image: icalialabs/my-app:development
+
+    ports:
+      - ${MY_APP_WEB_PORT:-3000}:3000
+
+    # The command we want to execute by default when running the container
+    command: rails server -b 0.0.0.0
+
+    profiles:
+      - development
+
+  devcontainer:
+    <<: *development
+    ports: [] # Managed by Visual Studio Code
+    profiles: []
+
+  web:
+    image: us-central1-docker.pkg.dev/icalialabs-event-planner/my-app/my-app-app${IMAGE_TAG_OR_DIGEST:-:latest}
+    build:
+      <<: *app_build
+      target: release
+    ports:
+      - ${MY_APP_WEB_PORT:-3000}:3000
+
+    depends_on:
+      - postgres
+    environment:
+      <<: *app_env
+      RAILS_ENV: production
+      DATABASE_URL: postgres://${USER:-you}@postgres:5432/MY_APP_development?encoding=unicode
+      SECRET_KEY_BASE: 60ff5b18bcc63e354e8e476f0cd0eb6b96a779246fbd865db930f702a15aa48c20c2967a9f99577cfedd0d4a1c1741168c402944772c15b8fee152774c144189
+    profiles:
+      - staging
