@@ -16,6 +16,7 @@
   // scripts from your source tree. For example:
   // bash scripts/install-dev-tools.sh. Not set by default.
   "postCreateCommand": "dev-entrypoint rails db:migrate:status",
+  "postCreateCommand": "rails db:migrate RAILS_ENV=test",
 
   // Dockerfile Compose Config =================================================
 
