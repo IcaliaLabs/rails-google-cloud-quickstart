@@ -100,6 +100,8 @@ RUN apt-get install -y --no-install-recommends \
   openssh-client \
   # Para esperar a que el servicio de minio (u otros) esté disponible:
   netcat \
+  # Cliente de postgres:
+  postgresql-client \
   # /proc file system utilities: (watch, ps):
   procps \
   # Vim will be used to edit files when inside the container (git, etc):
