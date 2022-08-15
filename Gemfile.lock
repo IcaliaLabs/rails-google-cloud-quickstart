@@ -110,6 +110,7 @@ GEM
       cliver (~> 0.3)
       concurrent-ruby (~> 1.1)
       websocket-driver (>= 0.6, < 0.8)
+    foreman (0.87.2)
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -310,6 +311,7 @@ DEPENDENCIES
   cuprite (~> 0.13)
   debug
   factory_bot_rails (~> 6.2)
+  foreman (~> 0.87.2)
   htmlbeautifier (~> 1.4, >= 1.4.2)
   importmap-rails
   jbuilder

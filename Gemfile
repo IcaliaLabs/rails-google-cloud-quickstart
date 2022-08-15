@@ -87,6 +87,10 @@ group :development do
 
   # IDE tools for code completion, inline documentation, and static analysis
   gem 'solargraph', '~> 0.45.0'
+
+  # Process manager for applications with multiple components - we'll use it to
+  # launch both Rails and TailwindCSS processes in one go.
+  gem 'foreman', '~> 0.87.2'
 end
 
 group :test do
