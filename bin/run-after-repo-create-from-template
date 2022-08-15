@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'active_support/core_ext/string/inflections'
+
+repo_name = File.basename(`git remote get-url origin`.strip, '.git')
+
+underscored = repo_name.downcase.underscore
+dasherized = underscored.dasherize
+env_vared = underscored.upcase
+classified = underscored.classify
+
+system 'find ./ -type f -not -path "./git/*" -exec sed -i ' \
+        "-e 's/rails_google_cloud_quickstart/#{underscored}/g' " \
+        "-e 's/rails-google-cloud-quickstart/#{dasherized}/g' " \
+        "-e 's/RAILS_GOOGLE_CLOUD_QUICKSTART/#{env_vared}/g' " \
+        "-e 's/RailsGoogleCloudQuickstart/#{classified}/g' " \
+       '{} \;'
+
+system 'rm -rf bin/run-after-repo-create-from-template'
