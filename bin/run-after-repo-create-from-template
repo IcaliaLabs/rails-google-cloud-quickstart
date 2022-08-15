@@ -12,7 +12,8 @@ env_vared = underscored.upcase
 classified = underscored.classify
 
 puts 'Renaming class names, image names, etc based on the name of the repo. Please wait...'
-system 'find ./ -type f -not -path "./git/*" -exec sed -i ' \
+system 'find . -type f -not -path "./tmp/*" -not -path "./.git/*" ' \
+        '-exec sed -i ' \
         "-e 's/rails_google_cloud_quickstart/#{underscored}/g' " \
         "-e 's/rails-google-cloud-quickstart/#{dasherized}/g' " \
         "-e 's/RAILS_GOOGLE_CLOUD_QUICKSTART/#{env_vared}/g' " \
