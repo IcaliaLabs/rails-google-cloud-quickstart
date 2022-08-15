@@ -5,7 +5,9 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "files.exclude": {
-    ".rubocop-*": true
+    ".rubocop-*": true,
+    ".vscode": true,
+    "coverage": true
   },
   "ruby.useBundler": true,
   "solargraph.autoformat": true,

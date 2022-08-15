@@ -1,0 +1,43 @@
+name: CI & CD
+
+on:
+  # Trigger the workflow on pushes to the main branch, including PR merges:
+  push:
+    branches:
+      - main
+
+# Generate a GitHub token that can be exchanged with Google Cloud - see
+# https://github.com/google-github-actions/auth/tree/v0.6.0#setting-up-workload-identity-federation
+permissions:
+  contents: read
+  id-token: write
+  deployments: write
+
+jobs:
+  test-and-build:
+    name: Integration
+    uses: ./.github/workflows/test-and-build.yml
+
+  # deploy-to-staging:
+  #   name: Staging
+  #   uses: ./.github/workflows/deploy-to-cloud-run.yml
+  #   needs:
+  #     - test-and-build
+  #   with:
+  #     environment: staging
+  #     deploy-name: staging
+  #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:pg-fourteen-a
+  #     cloud-run-service-suffix: ${{ needs.test-and-build.outputs.git-commit-short-sha }}
+  #     cloud-run-container-image: us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${{ needs.test-and-build.outputs.container-image-digest }}
+
+  # deploy-to-production:
+  #   name: Production
+  #   uses: ./.github/workflows/deploy-to-cloud-run.yml
+  #   needs:
+  #     - test-and-build
+  #   with:
+  #     environment: production
+  #     deploy-name: production
+  #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:pg-fourteen-a
+  #     cloud-run-service-suffix: ${{ needs.test-and-build.outputs.git-commit-short-sha }}
+  #     cloud-run-container-image: us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${{ needs.test-and-build.outputs.container-image-digest }}

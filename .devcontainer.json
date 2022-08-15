@@ -3,7 +3,7 @@
   // General ===================================================================
 
   // A display name for the container.
-  "name": "My App",
+  "name": "RailsGoogleCloudQuickstart",
 
   // A command string or list of command arguments to run after the container is
   // created. The commands execute from the workspaceFolder in the container.
@@ -16,7 +16,6 @@
   // scripts from your source tree. For example:
   // bash scripts/install-dev-tools.sh. Not set by default.
   "postCreateCommand": "dev-entrypoint rails db:migrate:status",
-  "postCreateCommand": "rails db:migrate RAILS_ENV=test",
 
   // Dockerfile Compose Config =================================================
 
@@ -40,7 +39,7 @@
     "chrome"
   ],
 
-  "workspaceFolder": "/workspaces/my-app",
+  "workspaceFolder": "/workspaces/rails-google-cloud-quickstart",
 
   // An array of extension IDs that specify the extensions to install inside the
   // container when you first attach to it.

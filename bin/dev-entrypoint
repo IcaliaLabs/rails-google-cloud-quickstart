@@ -13,10 +13,8 @@ if command_requires_setup?
     if command_might_require_database?
       wait_for_service_to_accept_connections 'tcp://postgres:5432'
       setup_activerecord_database unless activerecord_database_ready?
-    end
 
-    if %w[rspec].include?(ARGV[0])
-      system 'rails db:test:prepare'
+      system 'rails db:test:prepare' if %w[rspec].include?(ARGV[0])
     end
 
     remove_rails_pidfile if rails_server?

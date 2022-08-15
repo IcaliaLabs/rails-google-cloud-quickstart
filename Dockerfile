@@ -1,8 +1,8 @@
 # Stage 1: Runtime =============================================================
 # The minimal package dependencies required to run the app in the release image:
 
-# Use the official Ruby 3.1.0 Slim Bullseye image as base:
-FROM ruby:3.1.0-slim-bullseye AS runtime
+# Use the official Ruby 3.1.2 Slim Bullseye image as base:
+FROM ruby:3.1.2-slim-bullseye AS runtime
 
 # We'll set MALLOC_ARENA_MAX for optimization purposes & prevent memory bloat
 # https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html
@@ -18,6 +18,11 @@ RUN apt-get update \
     tzdata \
  && rm -rf /var/lib/apt/lists/*
 
+# Update the RubyGems system software, which will update bundler, to avoid the
+# "uninitialized constant Gem::Source (NameError)" error when running bundler
+# commands:
+RUN gem update --system && gem cleanup
+
 # Stage 2: development-base ====================================================
 # This stage will contain the minimal dependencies for the rest of the images
 # used to build the project:
@@ -27,6 +32,7 @@ FROM runtime AS development-base
 
 # Install the app build system dependency packages - we won't remove the apt
 # lists from this point onward:
+
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
@@ -42,18 +48,20 @@ RUN addgroup --gid ${DEVELOPER_UID} ${DEVELOPER_USERNAME} \
  ;  useradd -r -m -u ${DEVELOPER_UID} --gid ${DEVELOPER_UID} \
     --shell /bin/bash -c "Developer User,,," ${DEVELOPER_USERNAME}
 
-# Ensure the developer user's home directory and app path are owned by him/her:
+# Ensure that the home directory, the app path and bundler directories are owned
+# by the developer user:
 # (A workaround to a side effect of setting WORKDIR before creating the user)
 RUN userhome=$(eval echo ~${DEVELOPER_USERNAME}) \
  && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} $userhome \
- && mkdir -p /workspaces/my-app \
- && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /workspaces/my-app
+ && mkdir -p /workspaces/rails-google-cloud-quickstart \
+ && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /workspaces/rails-google-cloud-quickstart \
+ && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /usr/local/bundle/*
 
 # Add the app's "bin/" directory to PATH:
-ENV PATH=/workspaces/my-app/bin:$PATH
+ENV PATH=/workspaces/rails-google-cloud-quickstart/bin:$PATH
 
 # Set the app path as the working directory:
-WORKDIR /workspaces/my-app
+WORKDIR /workspaces/rails-google-cloud-quickstart
 
 # Change to the developer user:
 USER ${DEVELOPER_USERNAME}
@@ -70,7 +78,7 @@ RUN bundle config set --local jobs 2
 FROM development-base AS testing
 
 # Copy the project's Gemfile and Gemfile.lock files:
-COPY --chown=${DEVELOPER_USERNAME} Gemfile* /workspaces/my-app/
+COPY --chown=${DEVELOPER_USERNAME} Gemfile* /workspaces/rails-google-cloud-quickstart/
 
 # Configure bundler to exclude the gems from the "development" group when
 # installing, so we get the leanest Docker image possible to run tests:
@@ -99,6 +107,8 @@ RUN apt-get install -y --no-install-recommends \
   openssh-client \
   # Para esperar a que el servicio de minio (u otros) esté disponible:
   netcat \
+  # Cliente de postgres:
+  postgresql-client \
   # /proc file system utilities: (watch, ps):
   procps \
   # Vim will be used to edit files when inside the container (git, etc):
@@ -134,7 +144,7 @@ USER ${DEVELOPER_USERNAME}
 
 # Copy the gems installed in the "testing" stage:
 COPY --from=testing /usr/local/bundle /usr/local/bundle
-COPY --from=testing /workspaces/my-app/ /workspaces/my-app/
+COPY --from=testing /workspaces/rails-google-cloud-quickstart/ /workspaces/rails-google-cloud-quickstart/
 
 # Configure bundler to not exclude any gem group, so we now get all the gems
 # specified in the Gemfile:
@@ -157,7 +167,7 @@ ARG DEVELOPER_USERNAME=you
 ARG DEVELOPER_USERNAME=you
 
 # Copy the full contents of the project:
-COPY --chown=${DEVELOPER_USERNAME} . /workspaces/my-app/
+COPY --chown=${DEVELOPER_USERNAME} . /workspaces/rails-google-cloud-quickstart/
 
 # Compile the assets:
 RUN RAILS_ENV=production SECRET_KEY_BASE=10167c7f7654ed02b3557b05b88ece rails assets:precompile
@@ -220,14 +230,14 @@ FROM runtime AS release
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
 # Copy the app code and compiled assets from the "builder" stage to the
-# final destination at /workspaces/my-app:
-COPY --from=builder --chown=nobody:nogroup /workspaces/my-app /workspaces/my-app
+# final destination at /workspaces/rails-google-cloud-quickstart:
+COPY --from=builder --chown=nobody:nogroup /workspaces/rails-google-cloud-quickstart /workspaces/rails-google-cloud-quickstart
 
 # Set the container user to 'nobody':
 USER nobody
 
 # Set the RAILS and PORT default values:
-ENV HOME=/workspaces/my-app \
+ENV HOME=/workspaces/rails-google-cloud-quickstart \
     RAILS_ENV=production \
     RAILS_FORCE_SSL=yes \
     RAILS_LOG_TO_STDOUT=yes \
@@ -238,10 +248,10 @@ ENV HOME=/workspaces/my-app \
 RUN SECRET_KEY_BASE=10167c7f7654ed02b3557b05b88ece rails secret > /dev/null
 
 # Set the installed app directory as the working directory:
-WORKDIR /workspaces/my-app
+WORKDIR /workspaces/rails-google-cloud-quickstart
 
 # Set the entrypoint script:
-ENTRYPOINT [ "/workspaces/my-app/bin/entrypoint" ]
+ENTRYPOINT [ "/workspaces/rails-google-cloud-quickstart/bin/entrypoint" ]
 
 # Set the default command:
 CMD [ "puma" ]

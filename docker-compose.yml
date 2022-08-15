@@ -1,5 +1,7 @@
 volumes:
   postgres-data:
+  vscode-extensions:
+  vscode-insiders-extensions:
 
 services:
   postgres:
@@ -9,14 +11,18 @@ services:
       - type: volume
         source: postgres-data
         target: /var/lib/postgresql/data
+
+      - ./db/dumps:/db/dumps
+      - ./bin/dumpdb:/usr/local/bin/dumpdb:ro
+      - ./bin/restoredb:/usr/local/bin/restoredb:ro
     ports:
-      - published: ${MY_APP_PG_PORT:-5432}
+      - published: ${RAILS_GOOGLE_CLOUD_QUICKSTART_PG_PORT:-5432}
         target: 5432
     environment:
       POSTGRES_USER: ${USER:-you}
       POSTGRES_HOST_AUTH_METHOD: trust
 
-    # # See https://docs.docker.com/compose/profiles/
+    # See https://docs.docker.com/compose/profiles/
     # profiles:
     #   - ci
     #   - testing
@@ -26,7 +32,7 @@ services:
   chrome:
     image: icalialabs/chromium:latest
     ports:
-      - published: ${MY_APP_CHROME_WEB_PORT:-9222}
+      - published: ${RAILS_GOOGLE_CLOUD_QUICKSTART_CHROME_WEB_PORT:-9222}
         target: 9222
     # Mount application source code to support file uploading
     # (otherwise Chrome won't be able to find files).
@@ -34,7 +40,7 @@ services:
     volumes:
       - type: bind
         source: .
-        target: /workspaces/my-app
+        target: /workspaces/rails-google-cloud-quickstart
     environment:
       PORT: 9222
       # Set connection timeout to avoid timeout exception during debugging
@@ -51,15 +57,15 @@ services:
     build: &app_build
       context: .
       dockerfile: Dockerfile
-      target: testing
+      target: development #testing
       args:
         DEVELOPER_UID: ${UID:-1000}
         DEVELOPER_USERNAME: ${USER:-you}
-    image: icalialabs/my-app${TESTING_IMAGE_TAG:-:testing}
+    image: icalialabs/rails-google-cloud-quickstart${TESTING_IMAGE_TAG:-:testing}
 
     volumes:
       # Mount the app code into the app containers:
-      - .:/workspaces/my-app
+      - .:/workspaces/rails-google-cloud-quickstart
 
     # Keep the stdin open, so we can attach to our app container's process
     # and do things such as byebug, etc:
@@ -75,7 +81,7 @@ services:
     security_opt:
       - seccomp:unconfined
 
-    entrypoint: /workspaces/my-app/bin/dev-entrypoint
+    entrypoint: /workspaces/rails-google-cloud-quickstart/bin/dev-entrypoint
 
     # Link to our postgres and redis services, so they can be visible from our
     # app service containers:
@@ -89,7 +95,7 @@ services:
     # Specify environment variables available for our app containers. We'll
     # leave a YML anchor in case we need to override or add more variables if
     # needed on each app service:
-    environment: &app_env
+    environment: &app-env
       RAILS_LOG_TO_STDOUT: "true"
 
       DEBIAN_FRONTEND: dialog
@@ -97,59 +103,35 @@ services:
       # Tells the test suite to use the "chrome" service instead of a local
       # chrome install:
       CHROME_URL: http://chrome:9222
-      CHROME_PUBLIC_URL: ${MY_APP_CHROME_PUBLIC_URL:-http://localhost:9222}
+      CHROME_PUBLIC_URL: ${RAILS_GOOGLE_CLOUD_QUICKSTART_CHROME_PUBLIC_URL:-http://localhost:9222}
 
       DATABASE_URL: postgres://postgres:5432/?encoding=unicode
-
-      # Simplecov checks for the presence of this variable to generate a report
-      # with the format required by codeclimate... which is a bit lame...
-      # CC_TEST_REPORTER_ID: SOME_ID
-
-      # GOOGLE_CLOUD_PROJECT: my-project
 
     # profiles:
     #   - ci
     #   - testing
 
-  # The "plain" development container:
-  development: &development
+  # The Visual Studio Code / GitHub Codespaces development container:
+  devcontainer:
     <<: *app
     build:
       <<: *app_build
       target: development
 
-    image: icalialabs/my-app:development
+    volumes:
+      - .:/workspaces/rails-google-cloud-quickstart
+      - vscode-extensions:/home/${USER:-you}/.vscode-server/extensions
+      - vscode-insiders-extensions:/home/${USER:-you}/.vscode-server-insiders/extensions
 
-    ports:
-      - ${MY_APP_WEB_PORT:-3000}:3000
+    image: icalialabs/rails-google-cloud-quickstart:development
 
     # The command we want to execute by default when running the container
-    command: rails server -b 0.0.0.0
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+    environment:
+      <<: *app-env
+
+      EDITOR: code --wait
 
     # profiles:
     #   - development
-
-  devcontainer:
-    <<: *development
-    ports: [] # Managed by Visual Studio Code
-
-    # Overrides default command so things don't shut down after the process ends.
-    command: /bin/sh -c "while sleep 1000; do :; done"
-
-  web:
-    image: us-central1-docker.pkg.dev/icalialabs-event-planner/my-app/my-app-app${IMAGE_TAG_OR_DIGEST:-:latest}
-    build:
-      <<: *app_build
-      target: release
-    ports:
-      - ${MY_APP_WEB_PORT:-3000}:3000
-
-    depends_on:
-      - postgres
-    environment:
-      <<: *app_env
-      RAILS_ENV: production
-      DATABASE_URL: postgres://${USER:-you}@postgres:5432/MY_APP_development?encoding=unicode
-      SECRET_KEY_BASE: 60ff5b18bcc63e354e8e476f0cd0eb6b96a779246fbd865db930f702a15aa48c20c2967a9f99577cfedd0d4a1c1741168c402944772c15b8fee152774c144189
-    # profiles:
-    #   - staging

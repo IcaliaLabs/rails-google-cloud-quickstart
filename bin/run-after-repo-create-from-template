@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'active_support/core_ext/string/inflections'
+
+repo_name = File.basename(`git remote get-url origin`.strip, '.git')
+
+underscored = repo_name.downcase.underscore
+dasherized = underscored.dasherize
+env_vared = underscored.upcase
+classified = underscored.classify
+
+puts 'Renaming class names, image names, etc based on the name of the repo. Please wait...'
+system 'find . -type f -not -path "./tmp/*" -not -path "./.git/*" ' \
+        '-exec sed -i ' \
+        "-e 's/rails_google_cloud_quickstart/#{underscored}/g' " \
+        "-e 's/rails-google-cloud-quickstart/#{dasherized}/g' " \
+        "-e 's/RAILS_GOOGLE_CLOUD_QUICKSTART/#{env_vared}/g' " \
+        "-e 's/RailsGoogleCloudQuickstart/#{classified}/g' " \
+       '{} \;'
+
+system 'EDITOR="noop" rails credentials:edit'
+puts 'Make sure you store the "config/master.key" file contents on Google Cloud Secret Manager.'
+
+system 'rm -rf bin/run-after-repo-create-from-template'

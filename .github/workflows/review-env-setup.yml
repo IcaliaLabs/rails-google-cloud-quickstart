@@ -1,0 +1,46 @@
+name: Review Environment Setup
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+
+jobs:
+  create_deployment:
+    name: Create deployment
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_CLOUD_SQL_INSTANCE: pg-fourteen-a
+      DB_NAME: "rails_google_cloud_quickstart_pr${{ github.event.pull_request.number }}"
+
+    # Generate a GitHub token that can be exchanged with Google Cloud - see
+    # https://github.com/google-github-actions/auth/tree/v0.6.0#setting-up-workload-identity-federation
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      # actions/checkout MUST come before auth
+      - name: Checkout the code
+        uses: actions/checkout@v3.0.2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          service_account: github-actions-runner@rails-google-cloud-quickstart.iam.gserviceaccount.com
+          workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
+
+      - name: Set up gcloud Cloud SDK environment
+        uses: google-github-actions/setup-gcloud@v0.6.0
+
+      - name: Ensure a review database exists
+        run: |-
+          gcloud sql databases describe ${{ env.DB_NAME }} \
+            --instance=${{ env.GOOGLE_CLOUD_SQL_INSTANCE }} \
+            --format="value(name)" \
+          && echo "Database ${{ env.DB_NAME }} already exists" \
+          || gcloud sql databases create ${{ env.DB_NAME }} \
+            --instance=${{ env.GOOGLE_CLOUD_SQL_INSTANCE }}

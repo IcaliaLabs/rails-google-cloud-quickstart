@@ -24,13 +24,13 @@ default: &default
 
 development:
   <<: *default
-  database: my_app_development
+  database: rails_google_cloud_quickstart_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user running Rails.
-  #username: my_app
+  #username: rails_google_cloud_quickstart
 
   # The password associated with the postgres role (username).
   #password:
@@ -58,7 +58,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: my_app_test
+  database: rails_google_cloud_quickstart_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,4 +82,3 @@ test:
 #
 production:
   <<: *default
-  password: <%= ENV["my_app_DATABASE_PASSWORD"] %>
