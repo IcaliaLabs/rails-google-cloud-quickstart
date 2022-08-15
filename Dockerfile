@@ -1,8 +1,8 @@
 # Stage 1: Runtime =============================================================
 # The minimal package dependencies required to run the app in the release image:
 
-# Use the official Ruby 3.1.0 Slim Bullseye image as base:
-FROM ruby:3.1.0-slim-bullseye AS runtime
+# Use the official Ruby 3.1.2 Slim Bullseye image as base:
+FROM ruby:3.1.2-slim-bullseye AS runtime
 
 # We'll set MALLOC_ARENA_MAX for optimization purposes & prevent memory bloat
 # https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html
@@ -17,6 +17,11 @@ RUN apt-get update \
     openssl \
     tzdata \
  && rm -rf /var/lib/apt/lists/*
+
+# Update the RubyGems system software, which will update bundler, to avoid the
+# "uninitialized constant Gem::Source (NameError)" error when running bundler
+# commands:
+RUN gem update --system && gem cleanup
 
 # Stage 2: development-base ====================================================
 # This stage will contain the minimal dependencies for the rest of the images
@@ -43,12 +48,14 @@ RUN addgroup --gid ${DEVELOPER_UID} ${DEVELOPER_USERNAME} \
  ;  useradd -r -m -u ${DEVELOPER_UID} --gid ${DEVELOPER_UID} \
     --shell /bin/bash -c "Developer User,,," ${DEVELOPER_USERNAME}
 
-# Ensure the developer user's home directory and app path are owned by him/her:
+# Ensure that the home directory, the app path and bundler directories are owned
+# by the developer user:
 # (A workaround to a side effect of setting WORKDIR before creating the user)
 RUN userhome=$(eval echo ~${DEVELOPER_USERNAME}) \
  && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} $userhome \
  && mkdir -p /workspaces/rails-google-cloud-quickstart \
- && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /workspaces/rails-google-cloud-quickstart
+ && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /workspaces/rails-google-cloud-quickstart \
+ && chown -R ${DEVELOPER_USERNAME}:${DEVELOPER_USERNAME} /usr/local/bundle/*
 
 # Add the app's "bin/" directory to PATH:
 ENV PATH=/workspaces/rails-google-cloud-quickstart/bin:$PATH
