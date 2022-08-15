@@ -9,3 +9,8 @@ vendor/* linguist-vendored
 # Entrypoint shell scripts should always use LF:
 bin/dev-entrypoint text eol=lf
 bin/entrypoint text eol=lf
+
+# Dump & Restore DB scripts are meant to be run inside the postgres container,
+# and should always use LF:
+bin/dumpdb text eol=lf
+bin/restoredb text eol=lf

@@ -44,3 +44,7 @@ spec/examples.txt
 
 # Ignore ENV variables:
 .env
+
+# Ignore database dumps:
+db/dumps/*
+!db/dumps/.keep
