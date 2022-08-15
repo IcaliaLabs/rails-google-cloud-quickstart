@@ -18,4 +18,7 @@ system 'find ./ -type f -not -path "./git/*" -exec sed -i ' \
         "-e 's/RailsGoogleCloudQuickstart/#{classified}/g' " \
        '{} \;'
 
+system 'EDITOR="noop" rails credentials:edit'
+puts 'Make sure you store the "config/master.key" file contents on Google Cloud Secret Manager.'
+
 system 'rm -rf bin/run-after-repo-create-from-template'
