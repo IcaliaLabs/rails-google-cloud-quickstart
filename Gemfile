@@ -62,6 +62,10 @@ group :development, :test do
 
   # We'll use RSpec as the testing framework for Rails
   gem 'rspec-rails', '~> 6.0.0.rc1'
+
+  # A framework and DSL for defining and using test factories - more explicit,
+  # and all-around easier to work with than fixtures.
+  gem 'factory_bot_rails', '~> 6.2'
 end
 
 group :development do
@@ -86,10 +90,6 @@ group :development do
 end
 
 group :test do
-  # A framework and DSL for defining and using test factories - more explicit,
-  # and all-around easier to work with than fixtures.
-  gem 'factory_bot_rails', '~> 6.2'
-
   # Provides RSpec- and Minitest-compatible one-liners to test common Rails
   # functionality that, if written by hand, would be much longer, more complex,
   # and error-prone.
