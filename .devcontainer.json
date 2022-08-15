@@ -78,6 +78,9 @@
     "github.vscode-pull-request-github",
 
     // Use GitHub Copilot when available:
-    "github.copilot"
+    "github.copilot",
+
+    // Format ERB files:
+    "aliariff.vscode-erb-beautify"
   ]
 }
