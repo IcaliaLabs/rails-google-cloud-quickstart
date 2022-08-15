@@ -79,32 +79,32 @@ jobs:
           path: |
             tmp/capybara/screenshots
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0.8.0
-        with:
-          service_account: github-actions-runner@rails-google-cloud-quickstart.iam.gserviceaccount.com
-          workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v0.8.0
+      #   with:
+      #     service_account: github-actions-runner@rails-google-cloud-quickstart.iam.gserviceaccount.com
+      #     workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.6.0
+      # - name: Set up Google Cloud SDK
+      #   uses: google-github-actions/setup-gcloud@v0.6.0
 
-      - name: Authorize push to Google Cloud Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      # - name: Authorize push to Google Cloud Artifact Registry
+      #   run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      - name: Build & Push Release Image
-        id: build-and-push-release-image
-        uses: docker/build-push-action@v3.1.1
-        with:
-          push: true
-          target: release
-          platforms: linux/amd64
-          builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            DEVELOPER_UID=${{ steps.variables.outputs.runner-uid }}
-            DEVELOPER_USERNAME=${{ steps.variables.outputs.runner-user }}
-          tags: |
-            us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:${{ steps.variables.outputs.git-commit-short-sha }}
-            us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:${{ steps.variables.outputs.git-dasherized-branch }}
-            us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build & Push Release Image
+      #   id: build-and-push-release-image
+      #   uses: docker/build-push-action@v3.1.1
+      #   with:
+      #     push: true
+      #     target: release
+      #     platforms: linux/amd64
+      #     builder: ${{ steps.buildx.outputs.name }}
+      #     build-args: |
+      #       DEVELOPER_UID=${{ steps.variables.outputs.runner-uid }}
+      #       DEVELOPER_USERNAME=${{ steps.variables.outputs.runner-user }}
+      #     tags: |
+      #       us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:${{ steps.variables.outputs.git-commit-short-sha }}
+      #       us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:${{ steps.variables.outputs.git-dasherized-branch }}
+      #       us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app:latest
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
