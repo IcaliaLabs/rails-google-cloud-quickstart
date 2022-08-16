@@ -56,12 +56,22 @@ gem 'on_container', '~> 0.0.17'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# To decode the tokens
+gem 'jwt', '~> 2.4', '>= 2.4.1'
+
+# An authentication library compatible with all Rack-based frameworks
+gem 'warden', '~> 1.2', '>= 1.2.9'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # We'll use RSpec as the testing framework for Rails
   gem 'rspec-rails', '~> 6.0.0.rc1'
+
+  # A framework and DSL for defining and using test factories - more explicit,
+  # and all-around easier to work with than fixtures.
+  gem 'factory_bot_rails', '~> 6.2'
 end
 
 group :development do
@@ -83,13 +93,13 @@ group :development do
 
   # IDE tools for code completion, inline documentation, and static analysis
   gem 'solargraph', '~> 0.45.0'
+
+  # Process manager for applications with multiple components - we'll use it to
+  # launch both Rails and TailwindCSS processes in one go.
+  gem 'foreman', '~> 0.87.2'
 end
 
 group :test do
-  # A framework and DSL for defining and using test factories - more explicit,
-  # and all-around easier to work with than fixtures.
-  gem 'factory_bot_rails', '~> 6.2'
-
   # Provides RSpec- and Minitest-compatible one-liners to test common Rails
   # functionality that, if written by hand, would be much longer, more complex,
   # and error-prone.
@@ -115,4 +125,7 @@ group :test do
 
   # Generates test vs. code coverage reports
   gem 'simplecov', '~> 0.21.2', require: false
+
+  # We'll use sinatra to implement our mock servers for testing:
+  gem 'sinatra', '~> 2.2', '>= 2.2.2', require: false
 end

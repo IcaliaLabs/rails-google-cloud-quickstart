@@ -1,0 +1,5 @@
+<section id="auth-container" data-controller="sign-in" class="w-full content-center">
+  <%= form_with url: session_path, scope: :session, data: { sign_in_target: "sessionForm" } do |f| %>
+    <%= f.hidden_field :token, data: { sign_in_target: "token" } %>
+  <% end %>
+</section>
