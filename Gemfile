@@ -125,4 +125,7 @@ group :test do
 
   # Generates test vs. code coverage reports
   gem 'simplecov', '~> 0.21.2', require: false
+
+  # We'll use sinatra to implement our mock servers for testing:
+  gem 'sinatra', '~> 2.2', '>= 2.2.2', require: false
 end

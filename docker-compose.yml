@@ -107,6 +107,8 @@ services:
 
       DATABASE_URL: postgres://postgres:5432/?encoding=unicode
 
+      GOOGLE_CLOUD_PROJECT: rails-google-cloud-quickstart
+
     # profiles:
     #   - ci
     #   - testing
