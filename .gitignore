@@ -48,3 +48,6 @@ spec/examples.txt
 # Ignore database dumps:
 db/dumps/*
 !db/dumps/.keep
+
+# Ignore history files:
+**/*.*_hist*
