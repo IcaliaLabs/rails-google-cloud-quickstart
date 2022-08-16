@@ -1,0 +1,47 @@
+version: "2"         # required to adjust maintainability checks
+
+prepare:
+  fetch:
+    # RuboCop 1.9.1 - which is the latest version at CodeClimate won't
+    # understand that the file is to be downloaded... so we'll overwrite it:
+    - url: https://raw.githubusercontent.com/IcaliaLabs/guides/efd6d04563846dda160038845a1151134d8ac072/best_practices/code-analysis/rubocop/1.9.1/rubocop.yml
+      path: .rubocop.yml
+
+plugins:
+  brakeman:
+    enabled: true
+  eslint:
+    enabled: true
+  rubocop:
+    enabled: true
+    channel: rubocop-1-9-1
+    checks:
+      # Let's disable all cops that are already implemented as maintainability
+      # checks on CodeClimate:
+      Rubocop/Metrics/MethodLength: { enabled: false }         # See "method-lines"
+      Rubocop/Metrics/ParameterLists:  { enabled: false }      # See "argument-count"
+      Rubocop/Metrics/PerceivedComplexity:  { enabled: false } # See "method-complexity"
+  reek:
+    enabled: true
+    checks:
+      # Let's disable all checks already implemented as maintainability checks
+      # on CodeClimate:
+      TooManyMethods: { enabled: false }    # See "method-count"
+      TooManyStatements: { enabled: false } # See "method-lines"
+      # Let's also disable all checks whose RuboCop implementation is preferred:
+      IrresponsibleModule: { enabled: false }
+
+checks:
+  method-lines:
+    config:
+      threshold: 10 # Compromise between Sandy Metz's 5 lines and CC's 20 lines
+
+exclude_patterns:
+  - "config/"
+  - "db/"
+  - "script/"
+  - "**/spec/"
+  - "**/vendor/"
+  - "bin/bundle"
+  - "bin/rails"
+  - "bin/rake"
