@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module IdentityPlatform
-  #= DecodeIdentityToken::CertStore
+  #= IdentityPlatform::CertStore
   #
   # This class is used by the DecodeIdentityToken service to retrieve and store
   # the certificates used to properly decode tokens issued by Google Cloud
