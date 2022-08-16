@@ -1,6 +1,6 @@
 <div>
   <h1 class="font-bold text-4xl">Hello<%= ' ' + current_user.email if user_signed_in? %>!</h1>
-  <p>
+  <p class=" text-blue-600">
     <% unless user_signed_in? %><%= link_to 'Sign in?', new_session_path %>
     <% else %><%= link_to 'Sign Out?', session_path, data: { 'turbo-method': :delete } %>
     <% end %>
