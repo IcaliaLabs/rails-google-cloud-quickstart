@@ -7,5 +7,5 @@ Rails.application.routes.draw do
   root 'home#show'
 
   get 'sign-in', to: 'session#new', as: :new_session
-  resource :session, only: %i[create destroy]
+  resource :session, only: %i[create destroy], controller: :session
 end
