@@ -19,7 +19,7 @@ jobs:
     name: Teardown deployment
     runs-on: ubuntu-latest
     env:
-      GOOGLE_CLOUD_PROJECT: pointb-assessment-tool
+      GOOGLE_CLOUD_SQL_INSTANCE: postgres-dev-a
 
     steps:
       # actions/checkout MUST come before auth

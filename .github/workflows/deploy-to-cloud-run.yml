@@ -10,6 +10,14 @@ on:
       cloud-sql-instance:
         required: true
         type: string
+      cloud-sql-username-secret:
+        required: false
+        type: string
+        default: postgres-dev-username:latest
+      cloud-sql-password-secret:
+        required: false
+        type: string
+        default: postgres-dev-password:latest
       cloud-run-container-image:
         required: true
         type: string
@@ -60,13 +68,13 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           region: us-central1
-          # project_id: ${{ inputs.project-name }}
           service: rails-google-cloud-quickstart-${{ inputs.deploy-name }}
           suffix: ${{ inputs.cloud-run-service-suffix }}-${{ steps.set-deploy-timestamp.outputs.timestamp }}
           image: ${{ inputs.cloud-run-container-image }}
           secrets: |
             RAILS_MASTER_KEY=rails-google-cloud-quickstart-app-master-key:latest
-            DATABASE_PASSWORD=pg-fourteen-a-password:latest
+            DATABASE_USERNAME=${{ inputs.cloud-sql-username-secret }}
+            DATABASE_PASSWORD=${{ inputs.cloud-sql-password-secret }}
           env_vars: |
             DATABASE_URL=postgres://%2Fcloudsql%2F${{ steps.url-encode-cloud-sql-instance.outputs.encoded-value }}/${{ env.DATABASE_NAME }}
             GOOGLE_CLOUD_PROJECT=rails-google-cloud-quickstart

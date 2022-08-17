@@ -38,6 +38,11 @@ jobs:
   #   with:
   #     environment: production
   #     deploy-name: production
-  #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:pg-fourteen-a
+  #
+  #     # TODO: Use a different, production-capable instance when launched!
+  #     # cloud-sql-username-secret: postgres-prod-username
+  #     # cloud-sql-password-secret: postgres-prod-password
+  #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:postgres-dev-a
+  #
   #     cloud-run-service-suffix: ${{ needs.test-and-build.outputs.git-commit-short-sha }}
   #     cloud-run-container-image: us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${{ needs.test-and-build.outputs.container-image-digest }}
