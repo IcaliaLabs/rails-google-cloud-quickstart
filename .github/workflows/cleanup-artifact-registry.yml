@@ -1,0 +1,50 @@
+name: Cleanup Artifact Registry
+
+on:
+  # Run manually from the Actions tab:
+  workflow_dispatch:
+
+  schedule:
+    # Run each night:
+    - cron: '0 17 * * *'
+
+# Generate a GitHub token that can be exchanged with Google Cloud - see
+# https://github.com/google-github-actions/auth/tree/v0.6.0#setting-up-workload-identity-federation
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3.0.2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          service_account: github-actions-runner@rails-google-cloud-quickstart.iam.gserviceaccount.com
+          workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.6.0
+
+      - name: Get old images
+        id: get-old-images
+        run: |-
+          echo "::set-output name=digests::$(
+            gcloud artifacts docker images list \
+            us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app \
+            --filter="updateTime<$(date --date="7 days ago" --iso-8601=seconds) AND tags "'!'"~ [g-zG-Z]" \
+            --format json \
+            --include-tags | jq -r '.[].version')"
+
+      - name: Remove old images
+        run: |-
+          for row in $(echo "${{ steps.get-old-images.outputs.digests }}"); do
+            gcloud artifacts docker images delete \
+              us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${row} \
+              --async --delete-tags --quiet
+          done
