@@ -30,7 +30,7 @@ services:
     #   - development
 
   chrome:
-    image: icalialabs/chromium:latest
+    image: icalialabs/chromium:93.0.4577.82
     ports:
       - published: ${RAILS_GOOGLE_CLOUD_QUICKSTART_CHROME_WEB_PORT:-9222}
         target: 9222
