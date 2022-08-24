@@ -69,4 +69,10 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+  
+  # Allow viewing the app when working inside a GitHub Codespace
+  # from the browser:
+  if ENV['CODESPACE_NAME'].present?
+    config.hosts << Regexp.new("#{ENV['CODESPACE_NAME']}(.*)\\.githubpreview.dev", Regexp::IGNORECASE)
+  end
 end
