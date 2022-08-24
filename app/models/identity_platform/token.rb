@@ -52,7 +52,7 @@ module IdentityPlatform
     end
 
     def self.expected_audience
-      ENV.fetch 'GOOGLE_CLOUD_PROJECT', 'capital-group-event-planner'
+      ENV.fetch 'GOOGLE_CLOUD_PROJECT', 'rails-google-cloud-quickstart'
     end
 
     def self.expected_issuer
