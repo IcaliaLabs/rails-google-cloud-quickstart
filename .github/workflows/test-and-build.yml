@@ -86,13 +86,14 @@ jobs:
       #       command: after-build --coverage-input-type simplecov --prefix /workspaces/rails-google-cloud-quickstart
       #       version: "0.10.3"
 
-      - name: Archive system spec screenshots
+      - name: Archive test logs and screenshots
         uses: actions/upload-artifact@v3.1.0
         if: always()
         with:
           name: system-spec-screenshots
           retention-days: 7
           path: |
+            log/test.log
             tmp/capybara/screenshots
 
       # - name: Authenticate to Google Cloud
