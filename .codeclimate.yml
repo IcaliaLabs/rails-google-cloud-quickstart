@@ -2,7 +2,7 @@ version: "2"         # required to adjust maintainability checks
 
 prepare:
   fetch:
-    # RuboCop 1.9.1 - which is the latest version at CodeClimate won't
+    # RuboCop 1.31.1 - which is the latest version at CodeClimate won't
     # understand that the file is to be downloaded... so we'll overwrite it:
     - url: https://raw.githubusercontent.com/IcaliaLabs/guides/efd6d04563846dda160038845a1151134d8ac072/best_practices/code-analysis/rubocop/1.9.1/rubocop.yml
       path: .rubocop.yml
@@ -14,7 +14,7 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: rubocop-1-9-1
+    channel: rubocop-1-31-0
     checks:
       # Let's disable all cops that are already implemented as maintainability
       # checks on CodeClimate:
