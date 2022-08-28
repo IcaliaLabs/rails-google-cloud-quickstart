@@ -17,6 +17,7 @@ jobs:
   test-and-build:
     name: Integration
     uses: ./.github/workflows/test-and-build.yml
+    secrets: inherit
 
   # release-to-review:
   #   name: Delivery
@@ -29,3 +30,4 @@ jobs:
   #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:pg-fourteen-a
   #     cloud-run-service-suffix: ${{ needs.test-and-build.outputs.git-commit-short-sha }}
   #     cloud-run-container-image: us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${{ needs.test-and-build.outputs.container-image-digest }}
+  #   secrets: inherit
