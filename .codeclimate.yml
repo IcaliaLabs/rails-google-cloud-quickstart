@@ -21,15 +21,6 @@ plugins:
       Rubocop/Metrics/MethodLength: { enabled: false }         # See "method-lines"
       Rubocop/Metrics/ParameterLists:  { enabled: false }      # See "argument-count"
       Rubocop/Metrics/PerceivedComplexity:  { enabled: false } # See "method-complexity"
-  reek:
-    enabled: true
-    checks:
-      # Let's disable all checks already implemented as maintainability checks
-      # on CodeClimate:
-      TooManyMethods: { enabled: false }    # See "method-count"
-      TooManyStatements: { enabled: false } # See "method-lines"
-      # Let's also disable all checks whose RuboCop implementation is preferred:
-      IrresponsibleModule: { enabled: false }
 
 checks:
   method-lines:
