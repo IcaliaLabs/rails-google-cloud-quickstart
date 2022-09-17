@@ -70,7 +70,8 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  config.web_console.whitelisted_ips = ['172.16.0.0/12', '192.168.0.0/16']
+  config.web_console.whitelisted_ips = ['172.16.0.0/12', '192.168.0.0/16'] \
+    if defined?(config.web_console)
 
   # Allow viewing the app when working inside a GitHub Codespace
   # from the browser:
