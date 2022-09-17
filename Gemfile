@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.1.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.3', '>= 7.0.3.1'
+gem 'rails', '~> 7.0.4'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -57,7 +57,7 @@ gem 'on_container', '~> 0.0.17'
 # gem "image_processing", "~> 1.2"
 
 # To decode the tokens
-gem 'jwt', '~> 2.4', '>= 2.4.1'
+gem 'jwt', '~> 2.5'
 
 # An authentication library compatible with all Rack-based frameworks
 gem 'warden', '~> 1.2', '>= 1.2.9'
@@ -89,10 +89,10 @@ group :development do
 
   # Ruby code style checking and code formatting tool. It aims to enforce the
   # community-driven Ruby Style Guide.
-  gem 'rubocop', '~> 1.35'
+  gem 'rubocop', '~> 1.36'
 
   # IDE tools for code completion, inline documentation, and static analysis
-  gem 'solargraph', '~> 0.45.0'
+  gem 'solargraph', '~> 0.46.0'
 
   # Process manager for applications with multiple components - we'll use it to
   # launch both Rails and TailwindCSS processes in one go.
@@ -121,7 +121,7 @@ group :test do
   gem 'test-prof', '~> 1.0', '>= 1.0.10'
 
   # Allows stubbing HTTP requests and setting expectations on HTTP requests.
-  gem 'webmock', '~> 3.14'
+  gem 'webmock', '~> 3.18', '>= 3.18.1'
 
   # Generates test vs. code coverage reports
   gem 'simplecov', '~> 0.21.2', require: false
@@ -129,3 +129,4 @@ group :test do
   # We'll use sinatra to implement our mock servers for testing:
   gem 'sinatra', '~> 2.2', '>= 2.2.2', require: false
 end
+
