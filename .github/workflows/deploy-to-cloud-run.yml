@@ -24,6 +24,10 @@ on:
       cloud-run-service-suffix:
         required: false
         type: string
+      cloud-run-minimum-instances:
+        required: false
+        type: number
+        default: 0
 
 jobs:
   service-deploy:
@@ -81,6 +85,7 @@ jobs:
           flags: |-
             --allow-unauthenticated
             --add-cloudsql-instances ${{ inputs.cloud-sql-instance }}
+            --min-instances=${{ inputs.cloud-run-minimum-instances }}
             --service-account rails-google-cloud-quickstart-app@rails-google-cloud-quickstart.iam.gserviceaccount.com
 
       - name: Finalize the deployment state on Github
