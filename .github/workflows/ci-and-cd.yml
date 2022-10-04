@@ -46,6 +46,9 @@ jobs:
   #     # cloud-sql-password-secret: postgres-prod-password
   #     cloud-sql-instance: rails-google-cloud-quickstart:us-central1:postgres-dev-a
   #
+  #     # TODO: Set this to one when the app is ready to launch:
+  #     # cloud-run-minimum-instances: 1
+  #
   #     cloud-run-service-suffix: ${{ needs.test-and-build.outputs.git-commit-short-sha }}
   #     cloud-run-container-image: us-central1-docker.pkg.dev/rails-google-cloud-quickstart/rails-google-cloud-quickstart/rails-google-cloud-quickstart-app@${{ needs.test-and-build.outputs.container-image-digest }}
   #   secrets: inherit
