@@ -29,7 +29,7 @@ jobs:
           workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
 
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.6.0
+        uses: google-github-actions/setup-gcloud@v1.0.0
 
       - name: Get old images
         id: get-old-images
