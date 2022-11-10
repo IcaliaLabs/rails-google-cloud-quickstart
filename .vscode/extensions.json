@@ -7,6 +7,9 @@
     "kaiwood.endwise",
     "ninoseki.vscode-gem-lens",
     "castwide.solargraph",
-    "ldrner.rspec-snippets-vscode"
+    "ldrner.rspec-snippets-vscode",
+
+    // SVG preview, etc:
+    "jock.svg"
   ]
 }

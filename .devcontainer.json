@@ -74,6 +74,9 @@
     "github.copilot",
 
     // Format ERB files:
-    "aliariff.vscode-erb-beautify"
+    "aliariff.vscode-erb-beautify",
+
+    // SVG preview, etc:
+    "jock.svg"
   ]
 }
