@@ -49,7 +49,7 @@ jobs:
 
       - name: Build Test Image
         id: build-test-image
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           load: true
           target: testing
@@ -110,7 +110,7 @@ jobs:
 
       # - name: Build & Push Release Image
       #   id: build-and-push-release-image
-      #   uses: docker/build-push-action@v3.1.1
+      #   uses: docker/build-push-action@v3.2.0
       #   with:
       #     push: true
       #     target: release
