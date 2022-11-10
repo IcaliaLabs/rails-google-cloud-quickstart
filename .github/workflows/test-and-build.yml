@@ -33,7 +33,7 @@ jobs:
         # on our systems
         name: Generate UUID for build
         id: uuidgen
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "uuid=$(uuidgen)" >> $GITHUB_OUTPUT
 
       - name: Set additional variables
         id: variables
