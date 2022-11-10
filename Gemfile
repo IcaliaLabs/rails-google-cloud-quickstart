@@ -67,7 +67,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # We'll use RSpec as the testing framework for Rails
-  gem 'rspec-rails', '~> 6.0.0.rc1'
+  gem 'rspec-rails', '~> 6.0', '>= 6.0.1'
 
   # A framework and DSL for defining and using test factories - more explicit,
   # and all-around easier to work with than fixtures.
@@ -85,40 +85,38 @@ group :development do
   # gem "spring"
 
   # Linters, etc:
-  gem 'htmlbeautifier', '~> 1.4', '>= 1.4.2'
+  gem 'htmlbeautifier', '~> 1.4', '>= 1.4.2', require: false
 
   # Ruby code style checking and code formatting tool. It aims to enforce the
   # community-driven Ruby Style Guide.
-  gem 'rubocop', '~> 1.36'
+  gem 'rubocop', '~> 1.38', require: false
 
   # IDE tools for code completion, inline documentation, and static analysis
-  gem 'solargraph', '~> 0.46.0'
+  gem 'solargraph', '~> 0.47.2', require: false
 
   # Process manager for applications with multiple components - we'll use it to
   # launch both Rails and TailwindCSS processes in one go.
-  gem 'foreman', '~> 0.87.2'
+  gem 'foreman', '~> 0.87.2', require: false
 end
 
 group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'capybara'
+
   # Provides RSpec- and Minitest-compatible one-liners to test common Rails
   # functionality that, if written by hand, would be much longer, more complex,
   # and error-prone.
-  gem 'shoulda-matchers', '~> 5.1'
-
-  # An integration testing tool for rack based web applications. It simulates
-  # how a user would interact with a website.
-  # Used for Rails system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'capybara', '~> 3.37', '>= 3.37.1'
+  gem 'shoulda-matchers', '~> 5.2'
 
   # A driver for Capybara that allows you to run your tests on a headless Chrome
   # browser
-  gem 'cuprite', '~> 0.13'
+  gem 'cuprite', '~> 0.14.2'
 
   # Ruby applications tests profiling tools. Contains tools to analyze factories
   # usage, integrate with Ruby profilers, profile your examples using
   # ActiveSupport notifications (if any) and statically analyze your code with
   # custom RuboCop cops:
-  gem 'test-prof', '~> 1.0', '>= 1.0.10'
+  gem 'test-prof', '~> 1.0', '>= 1.0.11'
 
   # Allows stubbing HTTP requests and setting expectations on HTTP requests.
   gem 'webmock', '~> 3.18', '>= 3.18.1'
@@ -127,6 +125,5 @@ group :test do
   gem 'simplecov', '~> 0.21.2', require: false
 
   # We'll use sinatra to implement our mock servers for testing:
-  gem 'sinatra', '~> 2.2', '>= 2.2.2', require: false
+  gem 'sinatra', '~> 3.0', '>= 3.0.2', require: false
 end
-
