@@ -56,9 +56,6 @@
     // documentation for Ruby:
     "castwide.solargraph",
 
-    // Search modules, class and methods in ruby files using vscode go to symbol:
-    "miguel-savignano.ruby-symbols",
-
     // Git Lens:
     "eamodio.gitlens",
 
