@@ -52,7 +52,7 @@ jobs:
       - name: URLEncode Cloud SQL Instance string
         id: url-encode-cloud-sql-instance
         run: |-
-          ruby -e 'require "erb"; puts "::set-output name=encoded-value::#{ERB::Util.url_encode("${{ inputs.cloud-sql-instance }}")}"'
+          ruby -e 'require "erb"; puts "encoded-value=#{ERB::Util.url_encode("${{ inputs.cloud-sql-instance }}")}"' >> $GITHUB_OUTPUT
 
       - name: Register Deploy Start on Github
         uses: bobheadxi/deployments@v1.3.0
