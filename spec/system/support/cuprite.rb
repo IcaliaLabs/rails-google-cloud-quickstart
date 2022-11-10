@@ -60,8 +60,6 @@ end
 # Configure Capybara to use :cuprite driver by default
 Capybara.default_driver = Capybara.javascript_driver = :cuprite_remote
 
-#= CupriteHelpers
-#
 # A couple of methods used to help the development of system tests
 module CupriteHelpers
   # Drop #pause anywhere in a test to stop the execution.

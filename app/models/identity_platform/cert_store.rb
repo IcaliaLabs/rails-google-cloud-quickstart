@@ -3,11 +3,8 @@
 require 'net/http'
 
 module IdentityPlatform
-  #= IdentityPlatform::CertStore
-  #
-  # This class is used by the DecodeIdentityToken service to retrieve and store
-  # the certificates used to properly decode tokens issued by Google Cloud
-  # Identity Platform
+  # Retrieves and stores the certificates used to properly decode tokens issued
+  # by Google Cloud Identity Platform
   class CertStore
     extend MonitorMixin
 

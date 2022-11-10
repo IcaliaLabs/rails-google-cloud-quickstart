@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-#= HomeController
-#
-# Handles the home or start page actions.
+# Handles the home web requests
 class HomeController < ApplicationController
   def show; end
 end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-#= User
-#
 # A person who has an account on the site (via Google Cloud Identity Platform).
 class User < ApplicationRecord
   validates :identity_platform_id, presence: true, uniqueness: true
