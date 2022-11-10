@@ -65,7 +65,7 @@ jobs:
 
       - name: Set deploy timestamp
         id: set-deploy-timestamp
-        run: echo "::set-output name=timestamp::$(date +%s)"
+        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Deploy to Cloud Run
         id: deploy

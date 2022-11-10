@@ -41,7 +41,7 @@ jobs:
 
       - name: Set build timestamp
         id: set-build-timestamp
-        run: echo "::set-output name=timestamp::$(date +%s)"
+        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         id: buildx
