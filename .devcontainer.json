@@ -24,7 +24,7 @@
   // Docker Compose configuration. The order of the array matters since the
   // contents of later files can override values set in previous ones.
   "dockerComposeFile": [
-    "docker-compose.yml", // The compose file with the common services
+    "docker-compose.yml" // The compose file with the common services
   ],
 
   "shutdownAction": "stopCompose",
