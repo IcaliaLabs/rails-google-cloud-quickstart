@@ -49,10 +49,6 @@
 
     "KoichiSasada.vscode-rdbg",
 
-    // Provides enhanced Ruby language and debugging support for Visual Studio
-    // Code:
-    "rebornix.ruby",
-
     // execute rubocop for current Ruby code.
     "misogi.ruby-rubocop",
 
