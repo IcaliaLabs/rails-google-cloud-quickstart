@@ -28,6 +28,14 @@ on:
         required: false
         type: number
         default: 0
+      cloud-run-service-cpu-count:
+        required: false
+        type: number
+        default: 1
+      cloud-run-service-memory:
+        required: false
+        type: string
+        default: 512Mi
 
 jobs:
   service-deploy:
@@ -38,21 +46,21 @@ jobs:
     steps:
       # actions/checkout MUST come before auth
       - name: Checkout the code
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0.8.0
+        uses: google-github-actions/auth@v1.0.0
         with:
           service_account: github-actions-runner@rails-google-cloud-quickstart.iam.gserviceaccount.com
           workload_identity_provider: projects/000000000000/locations/global/workloadIdentityPools/devops/providers/github
 
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.6.0
+        uses: google-github-actions/setup-gcloud@v1.0.0
 
       - name: URLEncode Cloud SQL Instance string
         id: url-encode-cloud-sql-instance
         run: |-
-          ruby -e 'require "erb"; puts "::set-output name=encoded-value::#{ERB::Util.url_encode("${{ inputs.cloud-sql-instance }}")}"'
+          ruby -e 'require "erb"; puts "encoded-value=#{ERB::Util.url_encode("${{ inputs.cloud-sql-instance }}")}"' >> $GITHUB_OUTPUT
 
       - name: Register Deploy Start on Github
         uses: bobheadxi/deployments@v1.3.0
@@ -65,11 +73,11 @@ jobs:
 
       - name: Set deploy timestamp
         id: set-deploy-timestamp
-        run: echo "::set-output name=timestamp::$(date +%s)"
+        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Deploy to Cloud Run
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0.9.0
+        uses: google-github-actions/deploy-cloudrun@v0.10.3
         with:
           region: us-central1
           service: rails-google-cloud-quickstart-${{ inputs.deploy-name }}
@@ -83,6 +91,8 @@ jobs:
             DATABASE_URL=postgres://%2Fcloudsql%2F${{ steps.url-encode-cloud-sql-instance.outputs.encoded-value }}/${{ env.DATABASE_NAME }}
             GOOGLE_CLOUD_PROJECT=rails-google-cloud-quickstart
           flags: |-
+            --cpu ${{ inputs.cloud-run-service-cpu-count }}
+            --memory ${{ inputs.cloud-run-service-memory }}
             --allow-unauthenticated
             --add-cloudsql-instances ${{ inputs.cloud-sql-instance }}
             --min-instances=${{ inputs.cloud-run-minimum-instances }}

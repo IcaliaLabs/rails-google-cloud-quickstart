@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-#= SessionController
-#
-# Handles the user session actions.
+# Handles the user session web requests
 class SessionController < ApplicationController
   def new; end
 

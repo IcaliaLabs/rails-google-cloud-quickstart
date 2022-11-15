@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module IdentityPlatform
-  #= IdentityPlatform::WardenStrategy
-  #
-  # A warden strategy to authenticate users with a token from Identity Platform
+  # A warden strategy to authenticate users with a token from Google Cloud
+  # Identity Platform
   class WardenStrategy < Warden::Strategies::Base
     def valid?
       !token_string.nil?
