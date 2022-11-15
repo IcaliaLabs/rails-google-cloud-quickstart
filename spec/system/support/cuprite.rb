@@ -54,11 +54,7 @@ Capybara.register_driver(:cuprite_remote) do |app|
       # var to a falsey value
       headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
     }.merge(remote_options)
-  ).tap do |driver|
-    # TODO: Remove this tap block when https://github.com/rubycdp/cuprite/pull/214
-    # is released
-    driver.options[:save_path] = File.expand_path(driver.options[:save_path])
-  end
+  )
 end
 
 # Configure Capybara to use :cuprite driver by default

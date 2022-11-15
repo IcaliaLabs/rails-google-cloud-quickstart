@@ -110,7 +110,7 @@ group :test do
 
   # A driver for Capybara that allows you to run your tests on a headless Chrome
   # browser
-  gem 'cuprite', '~> 0.14.2'
+  gem 'cuprite', '~> 0.14.3'
 
   # Ruby applications tests profiling tools. Contains tools to analyze factories
   # usage, integrate with Ruby profilers, profile your examples using
