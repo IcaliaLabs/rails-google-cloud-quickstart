@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module IdentityPlatform
-  #= IdentityPlatform::Token
-  #
-  # The tokens we obtain when authenticating users through Google Cloud Identity
+  # The token we obtain when authenticating users through Google Cloud Identity
   # Platform
   class Token
     include ActiveModel::Model
