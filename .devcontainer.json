@@ -24,7 +24,7 @@
   // Docker Compose configuration. The order of the array matters since the
   // contents of later files can override values set in previous ones.
   "dockerComposeFile": [
-    "docker-compose.yml", // The compose file with the common services
+    "docker-compose.yml" // The compose file with the common services
   ],
 
   "shutdownAction": "stopCompose",
@@ -49,19 +49,12 @@
 
     "KoichiSasada.vscode-rdbg",
 
-    // Provides enhanced Ruby language and debugging support for Visual Studio
-    // Code:
-    "rebornix.ruby",
-
     // execute rubocop for current Ruby code.
     "misogi.ruby-rubocop",
 
     // A language server that provides intellisense, code completion, and inline
     // documentation for Ruby:
     "castwide.solargraph",
-
-    // Search modules, class and methods in ruby files using vscode go to symbol:
-    "miguel-savignano.ruby-symbols",
 
     // Git Lens:
     "eamodio.gitlens",
@@ -81,6 +74,9 @@
     "github.copilot",
 
     // Format ERB files:
-    "aliariff.vscode-erb-beautify"
+    "aliariff.vscode-erb-beautify",
+
+    // SVG preview, etc:
+    "jock.svg"
   ]
 }

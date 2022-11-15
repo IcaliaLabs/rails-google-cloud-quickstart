@@ -85,18 +85,18 @@ group :development do
   # gem "spring"
 
   # Linters, etc:
-  gem 'htmlbeautifier', '~> 1.4', '>= 1.4.2'
+  gem 'htmlbeautifier', '~> 1.4', '>= 1.4.2', require: false
 
   # Ruby code style checking and code formatting tool. It aims to enforce the
   # community-driven Ruby Style Guide.
-  gem 'rubocop', '~> 1.36'
+  gem 'rubocop', '~> 1.36', require: false
 
   # IDE tools for code completion, inline documentation, and static analysis
-  gem 'solargraph', '~> 0.46.0'
+  gem 'solargraph', '~> 0.46.0', require: false
 
   # Process manager for applications with multiple components - we'll use it to
   # launch both Rails and TailwindCSS processes in one go.
-  gem 'foreman', '~> 0.87.2'
+  gem 'foreman', '~> 0.87.2', require: false
 end
 
 group :test do
