@@ -125,5 +125,5 @@ group :test do
   gem 'simplecov', '~> 0.21.2', require: false
 
   # We'll use sinatra to implement our mock servers for testing:
-  gem 'sinatra', '~> 3.0', '>= 3.0.2', require: false
+  gem 'sinatra', '~> 3.0', require: false
 end
